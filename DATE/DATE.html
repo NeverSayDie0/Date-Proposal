@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Go Out With Me Joanne ?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #4a4a4a;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            height: 50px;
+        }
+
+        /* Para sa Choices Layout */
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .primary-btn {
+            background-color: #ff4d6d;
+            color: white;
+            width: 100%;
+        }
+
+        .primary-btn:hover {
+            transform: scale(1.02);
+            background-color: #ff758f;
+        }
+
+        .choice-btn {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 2px solid #ffccd5;
+            text-align: left;
+            padding: 15px;
+            font-weight: normal;
+        }
+
+        .choice-btn:hover {
+            background-color: #fff0f3;
+            border-color: #ff4d6d;
+        }
+
+        /* Kapag napili ang isang option */
+        .choice-btn.selected {
+            background-color: #ff4d6d;
+            color: white;
+            border-color: #ff4d6d;
+            font-weight: bold;
+        }
+
+        #noBtn {
+            background-color: #6c757d;
+            color: white;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="quizContainer">
+        <!-- STEP 1: ANG PAG-AYA -->
+        <div id="step1">
+            <h1>Gusto mo ba akong makasama mag-date Joanne Mae? ❤️</h1>
+            <p>Pangako, masaya 'to at walang sapilitan (charot).</p>
+            <div class="btn-container">
+                <button id="yesBtn" class="primary-btn" style="width: auto;" onclick="nextStep(2)">Oo naman! 🥰</button>
+                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Hindi 💔</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: PAGKAIN -->
+        <div id="step2" style="display: none;">
+            <h1>Anong trip mong kainin natin? 🍕</h1>
+            <p>Pili ka ng isa (o i-screenshot mo kung gusto mo lahat!):</p>
+            <div class="choices-container">
+                <button class="choice-btn" onclick="selectFood(this, 'Samgyupsal / BBQ 🥩')">Samgyupsal / BBQ 🥩</button>
+                <button class="choice-btn" onclick="selectFood(this, 'Coffee & Pastries ☕🍰')">Coffee & Pastries ☕🍰</button>
+                <button class="choice-btn" onclick="selectFood(this, 'Ramen / Japanese Food 🍜')">Ramen / Japanese Food 🍜</button>
+                <button class="choice-btn" onclick="selectFood(this, 'Fast Food / Burger & Fries 🍔🍟')">Fast Food / Burger & Fries 🍔🍟</button>
+            </div>
+            <button class="primary-btn" onclick="nextStep(3)">Next ➡️</button>
+        </div>
+
+        <!-- STEP 3: LUGAR -->
+        <div id="step3" style="display: none;">
+            <h1>Saan naman natin gustong pumunta? 🗺️</h1>
+            <p>Saan ang vibe mo para sa date na 'to?</p>
+            <div class="choices-container">
+                <button class="choice-btn" onclick="selectPlace(this, 'Aesthetic Café 🌿')">Aesthetic Café 🌿</button>
+                <button class="choice-btn" onclick="selectPlace(this, 'Mall para mag-arcade/sine 🎮')">Mall para mag-arcade/sine 🎮</button>
+                <button class="choice-btn" onclick="selectPlace(this, 'Park para maglakad-lakad at mag-chill 🌳')">Park para maglakad-lakad at mag-chill 🌳</button>
+                <button class="choice-btn" onclick="selectPlace(this, 'Museum o Art Gallery 🎨')">Museum o Art Gallery 🎨</button>
+            </div>
+            <button class="primary-btn" onclick="showSummary()">Tapos na! ✨</button>
+        </div>
+
+        <!-- STEP 4: SUMMARY / FINAL SCREEN -->
+        <div id="step4" style="display: none;">
+            <h1 style="font-size: 2.5rem;">YAY! See you! 🎉</h1>
+            <p style="font-size: 1.2rem; font-weight: bold; color: #ff4d6d; margin-bottom: 20px;">
+                Eto ang plano natin:
+            </p>
+            <div style="background-color: #fff0f3; padding: 15px; border-radius: 10px; margin-bottom: 25px; text-align: left; border-left: 5px solid #ff4d6d;">
+                <p style="margin: 5px 0;"><strong>Pagkain:</strong> <span id="finalFood">Wala</span></p>
+                <p style="margin: 5px 0;"><strong>Lugar:</strong> <span id="finalPlace">Wala</span></p>
+            </div>
+            <p style="font-size: 1rem; color: #666;">
+                I-send mo na sa akin ang <strong>screenshot</strong> nito para ma-book at mapaghandaan ko na! 🥰❤️
+            </p>
+            <div style="font-size: 3rem; margin-top: 15px;">🥳✨🍕</div>
+        </div>
+    </div>
+
+    <script>
+        let chosenFood = "";
+        let chosenPlace = "";
+
+        // Para sa paglipat ng screen
+        function nextStep(step) {
+            if (step === 3 && chosenFood === "") {
+                alert("Pili ka muna ng pagkain para hindi tayo magutom! 😜");
+                return;
+            }
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'none';
+            
+            document.getElementById('step' + step).style.display = 'block';
+        }
+
+        // Kapag pumipili ng pagkain
+        function selectFood(button, food) {
+            const buttons = document.querySelectorAll('#step2 .choice-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            chosenFood = food;
+        }
+
+        // Kapag pumipili ng lugar
+        function selectPlace(button, place) {
+            const buttons = document.querySelectorAll('#step3 .choice-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            chosenPlace = place;
+        }
+
+        // Huling screen na may buod ng pinili niya
+        function showSummary() {
+            if (chosenPlace === "") {
+                alert("Pili ka muna ng lugar na pupuntahan natin! 🗺️");
+                return;
+            }
+            document.getElementById('step3').style.display = 'none';
+            document.getElementById('step4').style.display = 'block';
+            
+            document.getElementById('finalFood').innerText = chosenFood;
+            document.getElementById('finalPlace').innerText = chosenPlace;
+        }
+
+        // Trick para sa No button
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+    </script>
+
+</body>
+</html>
